@@ -1,3 +1,8 @@
+'''
+I made this in like 2013 and I uploaded it to another account on here that I lost access to. 
+I can not remember if all of this code is originally mine or not. -> herenti
+'''
+
 import random
 import time
 
