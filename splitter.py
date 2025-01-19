@@ -1,6 +1,5 @@
 import os
 import subprocess
-
 import shlex
 
 todir = os.listdir(os.getcwd())
@@ -22,22 +21,15 @@ todir = _dict
 while running == 1:
 
     for i in todir:
-        def _process():
-            processing = 1
-            _file = todir[i]
-            _dest = prepath+i+'/'+_file
-            os.mkdir(prepath+i)
-            os.rename(_file, _dest)
-            os.rename(_dest, prepath+i+'/output.mp3')
-            proc = subprocess.run(shlex.split('ffmpeg -i "'+prepath+i+'/output.mp3" -f segment -segment_time 14400 -c copy "'+prepath+i+'/Part%03d.mp3"'), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            out = proc.stdout
+        processing = 1
+        _file = todir[i]
+        _dest = prepath+i+'/'+_file
+        os.mkdir(prepath+i)
+        os.rename(_file, _dest)
+        proc = subprocess.run(shlex.split('ffmpeg -i "'+_dest+'" -f segment -segment_time 14400 -c copy "'+prepath+i+'/Part%03d.mp3"'), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        out = proc.stdout
+        print("Done with " + i)
+        os.remove(_dest)
 
-            print(out)
-            processing = 0
-
-        if processing == 0:
-            _process()
-        else:
-            pass
 
     running = 0
