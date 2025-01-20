@@ -1,6 +1,11 @@
 import os
 import subprocess
+import time
 import shlex
+
+print('1 hours: 3600 seconds, 2 hours: 7200 seconds, 3 hours: 10800 seconds, 4 hours: 14400 seconds, 5 hours: 18000 seconds.')
+time.sleep(0.5)
+_seconds = input('How many seconds to split the files? ')
 
 todir = os.listdir(os.getcwd())
 
@@ -26,7 +31,7 @@ while running == 1:
         _dest = prepath+i+'/'+_file
         os.mkdir(prepath+i)
         os.rename(_file, _dest)
-        proc = subprocess.run(shlex.split('ffmpeg -i "'+_dest+'" -f segment -segment_time 14400 -c copy "'+prepath+i+'/Part%03d.mp3"'), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc = subprocess.run(shlex.split('ffmpeg -i "'+_dest+'" -f segment -segment_time '+_seconds+' -c copy "'+prepath+i+'/Part%03d.mp3"'), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         out = proc.stdout
         print("Done with " + i)
         os.remove(_dest)

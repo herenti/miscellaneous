@@ -4,7 +4,7 @@ import time
 import shlex
 
 todir = os.listdir(os.getcwd())
-mergefile = open('merge.sh', 'r').read()
+mergefile = open('convert.sh', 'r').read()
 #extention = 'mp3'
 
 
@@ -42,14 +42,15 @@ for i in to_process:
     @invoke_at(r'%s' % _file)
     def start_the_tool():
         print(os.getcwd())
-        f = open(_file+'/merge.sh', 'w')
+        f = open(_file+'/convert.sh', 'w')
         f.write(mergefile)
         f.close()
-        proc = subprocess.run(shlex.split('sh merge.sh'), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc = subprocess.run(shlex.split('sh convert.sh'), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         out = proc.stdout
-        print('done with ' + i)
+        print(out)
         os.remove(_file+'/merge.sh')
         for x in to_process[i]:
             os.remove(x)
 
     start_the_tool()
+
