@@ -1,4 +1,4 @@
-^import re
+import re
 import html
 import json
 import time
