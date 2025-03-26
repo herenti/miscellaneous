@@ -5,6 +5,10 @@ import time
 import urllib.request
 import urllib.parse
 
+'''
+INSTRUCTIONS: run "python update.py" from the command line, and input what it asks.
+'''
+
 '''MIT License
 
 Copyright (c) 2023 Vissle Drissle
