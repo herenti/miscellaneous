@@ -31,7 +31,7 @@ def regex(pattern, x, default): return re.search(pattern, x).group(1) if re.sear
 
 root = "https://chatango.com"
 user_id = input ('username: ')
-_password = ''
+_password = input ('password: ')
 headers = {
   "User-Agent": "Mozilla/5.0"
   }
