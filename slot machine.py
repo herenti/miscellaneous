@@ -1,7 +1,7 @@
 import random
 
 
-slot_machine = {'Anpan': [2,100000],
+slot_machine = {'Anpan': [1,100000],
                 'Dildo': [20,10000],
                 'Fart wad': [25,6000],
                 'Squirrel': [30,7000],
