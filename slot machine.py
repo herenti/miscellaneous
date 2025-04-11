@@ -1,19 +1,19 @@
 import random
 
 
-slot_machine = {'Anpan': [1,50000],
-                'Dildo': [10,8000],
-                'Fart wad': [15,6000],
-                'Squirrel': [20,7000],
-                'Croissant': [23,6000],
+slot_machine = {'Anpan': [2,100000],
+                'Dildo': [20,10000],
+                'Fart wad': [25,6000],
+                'Squirrel': [30,7000],
+                'Croissant': [33,6000],
                 '❀': [35,5000],
                 '♥︎': [40,3000],
-                '✪': [50,1500],
-                'O-Chinchin': [65,500],
-                'O-Manko': [65,500],
-                'Derptoid': [70,100],
-                'Boobies': [70,50],
-                '糞': [50,5]
+                '✪': [80,1500],
+                'O-Chinchin': [450,500],
+                'O-Manko': [450,500],
+                'Derptoid': [650,100],
+                'Boobies': [650,50],
+                '糞': [550,5]
                 }
 
 
