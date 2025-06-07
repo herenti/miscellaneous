@@ -15,9 +15,6 @@ def Auth(user, password):
     data = urllib.parse.urlencode({"user_id": user, "password": password, "storecookie": "on", "checkerrors": "yes"}).encode()
     return regex('auth.chatango.com=(.*?);', urllib.request.urlopen("http://chatango.com/login", data).getheader('Set-Cookie'), None)
 
-
-ready = True
-
 manager = dict()
 server = 'c1.chatango.com'
 port = 5222
@@ -26,24 +23,23 @@ def start(username, password):
         cumsock = socket.socket()
         cumsock.connect((server, port))
         manager["socket"] = cumsock
-        manager["wbyte"] = b''
         auth = Auth(username, password)
-        login(auth)
+        if auth:
+          login(auth)
+        else:
+          print("Invalid login: " + username)
+          time.sleep(0.1)
 
 
 def login(auth):
         send('tlogin', auth, '2')
-        ready = False
-        time.sleep(1)
         manager["socket"].close()
+        print("logged in "+username)
 
 
 def send(*x):
         data = ':'.join(x).encode()
-        byte = b'\x00' if ready else b'\r\n\x00'
-        manager["wbyte"] += data+byte
-        manager["socket"].send(manager["wbyte"])
-        manager["wbyte"] = b''
+        manager["socket"].send(data+b'\x00')
 
 
 
@@ -53,7 +49,9 @@ try:
     for x in file.readlines():
       password = x.strip()
       accounts.append(password)
-except Exception as error: accounts = []
+except Exception as error:
+  accounts = []
+  print(error)
 
 if len(accounts) > 0:
   fail = []
@@ -63,4 +61,5 @@ if len(accounts) > 0:
       username = data[0]
       password = data[1]
       start(username, password)
-      print("logged in "+username)
+      time.sleep(0.1)
+
