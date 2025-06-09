@@ -1,5 +1,8 @@
 use reqwest::header::USER_AGENT;
 use reqwest::blocking::Client;
+use serde_json;
+
+//needs username and api key
 
 pub struct Danbooru;
 
@@ -7,7 +10,7 @@ impl Danbooru {
 
     pub fn danbooru(tags: &str) -> String {
 
-            let url = format!("https://danbooru.donmai.us/posts.json?tags={}+order:random+rating:general&login=herenti&api_key=&limit=1", tags);
+            let url = format!("https://danbooru.donmai.us/posts.json?tags={}+order:random+rating:general&login=&api_key=&limit=1", tags);
             let client = reqwest::blocking::Client::new();
             let res = client.get(url)
             .header(USER_AGENT, "MyRustBot/0.1").send().expect("REASON").text().unwrap();
