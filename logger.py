@@ -42,6 +42,8 @@ def send(*x):
         manager["socket"].send(data+b'\x00')
 
 
+#I think I was really lazy and copy/pasted the text file reading thing from vissle-drissle but i cant remember. 
+#I would make my own really quick but i am too lazy still.
 
 try:
   accounts = []
