@@ -14,10 +14,6 @@ fn main() {
             let line = i.trim();
             let line = line.split(":");
             let line = line.collect::<Vec<&str>>();
-            if line.len() < 1 {
-                println!("\r\n The questions.txt file is empty. Please see the readme for info. No questions to begin.\r\n");
-                running = false;
-            }
             let question = line[0];
             let answer = line[1];
             questions.push((question.to_string(), answer.to_string()));
@@ -65,10 +61,14 @@ fn main() {
             println!("\r\nThat is correct!!! Press any button to continue...");
             questions.remove(question_index);
             std::io::stdout().flush().unwrap();
+            let mut input = String::new();
+            io::stdin().read_line(&mut input).unwrap();
         }
         else {
             println!("\r\nThat is incorrect. Press any button to continue...");
             std::io::stdout().flush().unwrap();
+            let mut input = String::new();
+            io::stdin().read_line(&mut input).unwrap();
         }
     }
 }
