@@ -6,7 +6,7 @@ fn main() {
     let a = ["★"; 1];
     let b = ["fart"; 5];
     let c = ["waifu"; 10];
-    let d = ["cheese"; 50];
+    let d = ["cheese"; 20];
     let e = ["trash"; 100];
     let mut f = a.to_vec();
     f.extend(b);
@@ -20,15 +20,8 @@ fn main() {
     let choices = [&choice1, &choice2, &choice3];
     let mut scores = vec![];
     for i in choices {
-        match **i {
-            "★" => scores.push(100),
-            "fart" => scores.push(50),
-            "waifu" => scores.push(10),
-            "cheese" => scores.push(5),
-            "trash" => scores.push(1),
-            _ => (),
-
-        }
+        let count = f.iter().filter(|&&s| s == **i).count();
+        scores.push(100/count)
     }
 
     let mut counts = HashMap::new();
