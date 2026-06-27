@@ -36,19 +36,17 @@ fn main() {
         *counts.entry(x).or_insert(0) += 1;
     }
     let max_count = counts.values().copied().max().unwrap();
+    let score = scores[0] + scores[1] + scores[2];
     match max_count {
 
         1 => {
-            let score = scores[0] + scores[1] + scores[2];
             println!("{}|{}|{} -- You win: ${}", choice1, choice2, choice3, score);
         },
         2 => {
-            let score = scores[0] + scores[1] + scores[2];
             let score = score*2.0;
             println!("{}|{}|{} -- You win: ${} -- Two of a kind!", choice1, choice2, choice3, score);
         },
         3 => {
-            let score = scores[0] + scores[1] + scores[2];
             if score == 300.0 {
                 let score = score*1000.0;
                 println!("{}|{}|{} -- You win: ${} -- Three of a kind! Jackpot!", choice1, choice2, choice3, score);
