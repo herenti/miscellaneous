@@ -25,12 +25,14 @@ fn main() {
     let mut scores = vec![];
     for i in choices {
         let count = list.iter().filter(|&&s| s == **i).count();
-        scores.push(100/count)
+        println!("{}", count);
+        let num = 100.0/count as f64;
+        scores.push((num * 100.0).round() / 100.0);
     }
 
     let mut counts = HashMap::new();
 
-    for &x in &scores {
+    for &x in &choices {
         *counts.entry(x).or_insert(0) += 1;
     }
     let max_count = counts.values().copied().max().unwrap();
@@ -38,21 +40,21 @@ fn main() {
 
         1 => {
             let score = scores[0] + scores[1] + scores[2];
-            println!("{}|{}|{} -- Score: {}", choice1, choice2, choice3, score);
+            println!("{}|{}|{} -- You win: ${}", choice1, choice2, choice3, score);
         },
         2 => {
             let score = scores[0] + scores[1] + scores[2];
-            let score = score*2;
-            println!("{}|{}|{} -- Score: {} -- Two of a kind!", choice1, choice2, choice3, score);
+            let score = score*2.0;
+            println!("{}|{}|{} -- You win: ${} -- Two of a kind!", choice1, choice2, choice3, score);
         },
         3 => {
             let score = scores[0] + scores[1] + scores[2];
-            if score == 300 {
-                let score = score*1000;
-                println!("{}|{}|{} -- Score: {} -- Three of a kind! Jackpot!", choice1, choice2, choice3, score);
+            if score == 300.0 {
+                let score = score*1000.0;
+                println!("{}|{}|{} -- You win: ${} -- Three of a kind! Jackpot!", choice1, choice2, choice3, score);
             } else {
-                let score = score*3;
-                println!("{}|{}|{} -- Score: {} -- Three of a kind!", choice1, choice2, choice3, score);
+                let score = score*3.0;
+                println!("{}|{}|{} -- You win: ${} -- Three of a kind!", choice1, choice2, choice3, score);
             }
         },
         _ => {
