@@ -65,7 +65,7 @@ fn main() {
             _choices.push(choice);
         }
         let mut choices = vec![];
-        for i in 0.._choices.len() {
+        for i in 1.._choices.len()+1 {
             let choice = _choices.choose(&mut rng).unwrap().clone();
             choices.push((i.to_string(), choice.0.clone(), choice.1.clone()));
             let index = _choices.iter().position(|x| *x == choice).unwrap();
