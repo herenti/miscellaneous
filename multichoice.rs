@@ -2,7 +2,20 @@ use rand::prelude::IndexedRandom;
 use std::io::Write;
 use std::io;
 
+/*
 
+README:
+
+make a text file with questions in the following format in the appropriate directory for the program, named "questions.txt":
+
+questionorvocab1:answerordefinition1
+questionorvocab2:answerordefinition2
+questionorvocab3:answerordefinition3
+etc:etc
+
+make sure question and answer are seperated by ":" and do not have any other ":" in the line besides that.
+
+*/
 
 fn main() {
     let mut running = true;
