@@ -19,8 +19,14 @@ fn main() {
             questions.push((question.to_string(), answer.to_string()));
         }
     }
+    let mut answer_pool = questions.clone();
     while running {
-        let mut choices = vec![];
+        if answer_pool.len() == 0 {
+            println!("All questions answered correctly!");
+            running = false;
+            break;
+        }
+        let mut _choices = vec![];
         let mut _questions = questions.clone();
         let mut rng = rand::rng();
         let max_questions = if questions.len() > 4 {
@@ -28,26 +34,44 @@ fn main() {
         } else {
             questions.len()
         };
-        for i in 0..max_questions {
+        let question = answer_pool.choose(&mut rng).unwrap();
+        let q = &question.0;
+        let a = &question.1;
+        let mut n = 0;
+        let question_index = _questions.iter().position(|x| *x == (q.to_string(), a.to_string())).unwrap();
+        _questions.remove(question_index);
+        _choices.push(question.clone());
+        for i in 0..max_questions-1 {
 
             let choice = _questions.choose(&mut rng).unwrap().clone();
             let index = _questions.iter().position(|x| *x == choice).unwrap();
             _questions.remove(index);
+            _choices.push(choice);
+        }
+        let mut choices = vec![];
+        for i in 0.._choices.len() {
+            let choice = _choices.choose(&mut rng).unwrap().clone();
             choices.push((i.to_string(), choice.0.clone(), choice.1.clone()));
+            let index = _choices.iter().position(|x| *x == choice).unwrap();
+            _choices.remove(index);
+            if choice == *question {
+                n += i;
+            }
         }
-        if choices.len() == 0 {
-            println!("All questions answered correctly!");
-            running = false;
-            break;
-        }
-        let question = choices.choose(&mut rng).unwrap();
-        let q = &question.1;
-        let a = &question.2;
-        let n = &question.0;
-        let question_index = questions.iter().position(|x| *x == (q.to_string(), a.to_string())).unwrap();
+        let n = n.to_string();
         let mut final_string = format!("\r\nQuestion: {}\r\nAnswers:", q);
         for i in 0..choices.len() {
-            final_string += &format!("\r\n{}: {}", choices[i].0, choices[i].2);
+            let ans = if choices[i].2 == *a {
+                if choices[i].0 != n {
+                    "(duplicate, do not pick)"
+                }
+                else{
+                    &choices[i].2
+                }
+            } else {
+                &choices[i].2
+            };
+            final_string += &format!("\r\n{}: {}", choices[i].0, ans);
         }
         println!("{}", final_string);
         println!("\r\nEnter the number of the correct answer and press enter...\r\n");
@@ -59,7 +83,8 @@ fn main() {
         let input = input.as_str();
         if input == n {
             println!("\r\nThat is correct!!! Press any button to continue...");
-            questions.remove(question_index);
+            let question_index = answer_pool.iter().position(|x| *x == *(question)).unwrap();
+            answer_pool.remove(question_index);
             std::io::stdout().flush().unwrap();
             let mut input = String::new();
             io::stdin().read_line(&mut input).unwrap();
