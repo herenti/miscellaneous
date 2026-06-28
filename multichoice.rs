@@ -15,6 +15,9 @@ etc:etc
 
 make sure question and answer are seperated by ":" and do not have any other ":" in the line besides that.
 
+TODO:
+add % remaining questions and % correct at finish.
+
 */
 
 fn main() {
