@@ -1,0 +1,75 @@
+fdisk nvme0n1
+cryptsetup luksFormat --type luks1 /dev/nvme0n1p2
+cryptsetup luksOpen /dev/nvme0n1p2 voidmage
+vgcreate voidmage /dev/mapper/voidmage
+lvcreate --name swap -L 8G voidmage
+lvcreate --name root -l 100%FREE voidmage
+mkfs.xfs -L root /dev/voidmage/root
+mkswap /dev/voidmage/swap
+swapon /dev/voidmage/swap
+mount /dev/voidmage/root /mnt
+mkfs.vfat /dev/nvme0n1p1
+mkdir -p /mnt/boot/efi
+mount /dev/nvme0n1p1 /mnt/boot/efi
+mkdir -p /mnt/var/db/xbps/keys
+cp /var/db/xbps/keys/* /mnt/var/db/xbps/keys/
+xbps-install -Sy -R https://repo-default.voidlinux.org/current -r /mnt base-system cryptsetup grub-x86_64-efi lvm2
+xgenfstab /mnt > /mnt/etc/fstab
+xchroot /mnt
+chown root:root /
+chmod 755 /
+passwd root
+echo voidmage > /etc/hostname
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "en_US.UTF-8 UTF-8" >> /etc/default/libc-locales
+xbps-reconfigure -f glibc-locales
+xbps-install nano
+nano /etc/default/grub
+GRUB_ENABLE_CRYPTODISK=y
+blkid
+nano /etc/default/grub
+rd.lvm.vg=voidmage rd.luks.uuid=<UUID>
+dd bs=1 count=64 if=/dev/urandom of=/boot/volume.key
+cryptsetup luksAddKey /dev/nvme0n1p2 /boot/volume.key
+chmod 000 /boot/volume.key
+chmod -R g-rwx,o-rwx /boot
+nano /etc/crypttab
+voidmage   /dev/nvme0n1p2  /boot/volume.key   luks
+nano /etc/dracut.conf.d/10-crypt.conf
+install_items+=" /boot/volume.key /etc/crypttab "
+grub-install
+xbps-reconfigure -fa
+xbps-install void-repo-nonfree
+xbps-install -Sy
+xbps-install intel-ucode
+xbps-reconfigure -fa
+useradd herenti
+passwd herenti
+visudo
+usermod -a -G wheel herenti
+xbps-install NetworkManager
+ln -s /etc/sv/dbus /etc/runit/runsvdir/default/
+ln -s /etc/sv/NetworkManager /etc/runit/runsvdir/default/
+xbps-install xorg xinit
+xbps-install intel-media-driver
+xbps-install kde-plasma sddm dolphin konsole firefox ocean-sound-theme elogind 
+ln -s /etc/sv/sddm /etc/runit/runsvdir/default/
+ln -s /etc/sv/elogind /etc/runit/runsvdir/default/
+mkdir -p /etc/pipewire/pipewire.conf.d
+ln -s /usr/share/examples/wireplumber/10-wireplumber.conf /etc/pipewire/pipewire.conf.d/
+mkdir -p /etc/pipewire/pipewire.conf.d
+ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf /etc/pipewire/pipewire.conf.d/
+xbps-install libspa-bluetooth bluez ufw
+ln -s /etc/sv/bluetoothd /etc/runit/runsvdir/default/
+usermod -a -G bluetooth herenti
+ln -s /etc/sv/ufw /etc/runit/runsvdir/default/
+reboot
+
+if needed (rm /etc/resolv.conf)
+sudo resolvconf -u
+ufw enable
+
+xbps-install NetworkManager-openvpn openvpn
+
+
+
