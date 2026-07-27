@@ -1,0 +1,60 @@
+fdisk /dev/nvme0n1
+cryptsetup -v luksFormat /dev/nvme0n1p2
+cryptsetup open /dev/nvme0n1p2 root
+mkfs.ext4 /dev/mapper/root
+mount /dev/mapper/root /mnt
+mkfs.vfat /dev/nvme0n1p1
+mkdir -p /mnt/boot/efi
+mount /dev/nvme0n1p1 /mnt/boot/efi
+mkdir -p /mnt/var/db/xbps/keys
+cp /var/db/xbps/keys/* /mnt/var/db/xbps/keys/
+xbps-install -Sy -R https://repo-default.voidlinux.org/current -r /mnt base-system cryptsetup grub-x86_64-efi
+xgenfstab /mnt > /mnt/etc/fstab
+xchroot /mnt
+chown root:root /
+chmod 755 /
+passwd root
+echo voidmage > /etc/hostname
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "en_US.UTF-8 UTF-8" >> /etc/default/libc-locales
+xbps-reconfigure -f glibc-locales
+xbps-install nano
+blkid
+nano /etc/crypttab
+root UUID=<UUID-of-nvme0n1p2> none luks
+nano /etc/default/grub
+GRUB_ENABLE_CRYPTODISK=y
+rd.luks.uuid=<UUID> root=/dev/mapper/root
+grub-install --target=x86_64-efi --efi-directory=/boot/efi
+xbps-reconfigure -fa
+xbps-install void-repo-nonfree
+xbps-install -Sy
+xbps-install intel-ucode
+xbps-reconfigure -fa
+useradd herenti
+passwd herenti
+visudo
+usermod -a -G wheel herenti
+xbps-install NetworkManager
+ln -s /etc/sv/dbus /etc/runit/runsvdir/default/
+ln -s /etc/sv/NetworkManager /etc/runit/runsvdir/default/
+xbps-install xorg xinit
+xbps-install intel-media-driver
+xbps-install kde-plasma sddm dolphin konsole firefox ocean-sound-theme elogind 
+ln -s /etc/sv/sddm /etc/runit/runsvdir/default/
+ln -s /etc/sv/elogind /etc/runit/runsvdir/default/
+mkdir -p /etc/pipewire/pipewire.conf.d
+ln -s /usr/share/examples/wireplumber/10-wireplumber.conf /etc/pipewire/pipewire.conf.d/
+mkdir -p /etc/pipewire/pipewire.conf.d
+ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf /etc/pipewire/pipewire.conf.d/
+xbps-install libspa-bluetooth bluez ufw
+ln -s /etc/sv/bluetoothd /etc/runit/runsvdir/default/
+usermod -a -G bluetooth herenti
+ln -s /etc/sv/ufw /etc/runit/runsvdir/default/
+reboot
+
+if needed (rm /etc/resolv.conf)
+sudo resolvconf -u
+ufw enable
+
+xbps-install NetworkManager-openvpn openvpn
