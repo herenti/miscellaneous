@@ -1,10 +1,11 @@
+su
 fdisk /dev/nvme0n1
 cryptsetup luksFormat --type luks1 /dev/nvme0n1p2
 cryptsetup luksOpen /dev/nvme0n1p2 voidmage
 vgcreate voidmage /dev/mapper/voidmage
 lvcreate --name swap -L 8G voidmage
 lvcreate --name root -l 100%FREE voidmage
-mkfs.ext4 -L root /dev/voidmage/root
+mkfs.ext4 -L root /dev/voidmage/root (wiki says: mkfs.xfs -L root /dev/voidmage/root)
 mkswap /dev/voidmage/swap
 swapon /dev/voidmage/swap
 mount /dev/voidmage/root /mnt
@@ -28,6 +29,9 @@ nano /etc/default/grub
 GRUB_ENABLE_CRYPTODISK=y
 rd.lvm.vg=voidmage rd.luks.uuid=<UUID>
 grub-install --target=x86_64-efi --efi-directory=/boot/efi
+
+
+
 xbps-install -Sy
 xbps-install intel-ucode
 xbps-reconfigure -fa
@@ -47,12 +51,18 @@ ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf /etc/pipewire/pipewire
 ln -s /etc/sv/bluetoothd /etc/runit/runsvdir/default/
 ln -s /etc/sv/ufw /etc/runit/runsvdir/default/
 usermod -a -G bluetooth herenti
+
 reboot
+
 ufw enable
 if needed (rm /etc/resolv.conf)
 sudo resolvconf -u
 
-xbps-install nvidia580 nvidia580-libs-32bit mesa-dri-32bit steam libgcc-32bit libstdc++-32bit libdrm-32bit libglvnd-32bit
+(tablet)
+sudo xbps-install mesa-dri-32bit steam libgcc-32bit libstdc++-32bit libdrm-32bit libglvnd-32bit
+
+(nvidia laptop)
+sudo xbps-install nvidia580 nvidia580-libs-32bit mesa-dri-32bit steam libgcc-32bit libstdc++-32bit libdrm-32bit libglvnd-32bit
 
 
 
