@@ -13,7 +13,7 @@ mkdir -p /mnt/boot/efi
 mount /dev/nvme0n1p1 /mnt/boot/efi
 mkdir -p /mnt/var/db/xbps/keys
 cp /var/db/xbps/keys/* /mnt/var/db/xbps/keys/
-xbps-install -Sy -R https://repo-default.voidlinux.org/current -r /mnt base-system cryptsetup grub-x86_64-efi lvm2 nano
+xbps-install -Sy -R https://repo-default.voidlinux.org/current -r /mnt base-system cryptsetup grub-x86_64-efi lvm2 nano void-repo-nonfree
 xgenfstab /mnt > /mnt/etc/fstab
 xchroot /mnt
 chown root:root /
@@ -28,8 +28,6 @@ nano /etc/default/grub
 GRUB_ENABLE_CRYPTODISK=y
 rd.lvm.vg=voidmage rd.luks.uuid=<UUID>
 grub-install --target=x86_64-efi --efi-directory=/boot/efi
-xbps-reconfigure -fa
-xbps-install void-repo-nonfree
 xbps-install -Sy
 xbps-install intel-ucode
 xbps-reconfigure -fa
