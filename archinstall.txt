@@ -1,0 +1,23 @@
+fdisk /dev/nvme0n1
+cryptsetup -v luksFormat /dev/nvme0n1p2
+cryptsetup open /dev/nvme0n1p2 root
+mkfs.ext4 /dev/mapper/root
+mount /dev/mapper/root /mnt
+mkfs.fat -F32 /dev/nvme0n1p1
+mount --mkdir /dev/nvme0n1p1 /mnt/boot
+pacstrap -K /mnt base linux linux-firmware intel-ucode nano grub efibootmgr nano man-db man-pages networkmanager
+genfstab -U /mnt >> /mnt/etc/fstab
+arch-chroot -S /mnt
+nano /etc/mkinitcpio.conf
+sd-encrypt
+grub-install --target=x86_64-efi --efi-directory=/boot
+blkid
+rd.luks.name=device-UUID=root root=/dev/mapper/root
+mkinitcpio -P
+grub-mkconfig -o /boot/grub/grub.cfg
+useradd -m herenti
+EDITOR=nano visudo
+usermod -a -G wheel herenti
+pacman -S firefox kate konsole dolphin sddm plasma
+exit
+reboot
