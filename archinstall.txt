@@ -7,7 +7,7 @@ mkfs.ext4 /dev/mapper/root
 mount /dev/mapper/root /mnt
 mkfs.fat -F32 /dev/nvme0n1p1
 mount --mkdir /dev/nvme0n1p1 /mnt/boot
-pacstrap -K /mnt base linux linux-firmware intel-ucode nano grub efibootmgr nano man-db man-pages networkmanager
+pacstrap -K /mnt base linux linux-firmware intel-ucode sudo grub efibootmgr nano man-db man-pages networkmanager
 genfstab -U /mnt >> /mnt/etc/fstab
 arch-chroot -S /mnt
 nano /etc/mkinitcpio.conf
