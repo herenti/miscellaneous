@@ -27,9 +27,10 @@ useradd -m herenti
 passwd herenti
 EDITOR=nano visudo
 usermod -a -G wheel herenti
-pacman -S firefox kate konsole dolphin sddm plasma ufw
-systemctl start sddm && systemctl enable sddm
-systemctl start networkmanager && systemctl enable networkmanager
-systemctl start ufw && systemctl enable ufw 
+pacman -S firefox kate konsole dolphin sddm plasma ufw librewolf
+systemctl enable sddm
+systemctl enable networkmanager
+systemctl enable ufw 
 exit
 reboot
+ufw enable
