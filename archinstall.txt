@@ -10,6 +10,7 @@ mount --mkdir /dev/nvme0n1p1 /mnt/boot
 pacstrap -K /mnt base linux linux-firmware intel-ucode sudo grub efibootmgr nano man-db man-pages networkmanager
 genfstab -U /mnt >> /mnt/etc/fstab
 arch-chroot -S /mnt
+passwd
 locale-gen
 nano /etc/locale.conf
 LANG=en_US.UTF-8
@@ -23,6 +24,7 @@ rd.luks.name=device-UUID=root root=/dev/mapper/root
 mkinitcpio -P
 grub-mkconfig -o /boot/grub/grub.cfg
 useradd -m herenti
+passwd herenti
 EDITOR=nano visudo
 usermod -a -G wheel herenti
 pacman -S firefox kate konsole dolphin sddm plasma ufw
