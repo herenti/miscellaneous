@@ -20,6 +20,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 useradd -m herenti
 EDITOR=nano visudo
 usermod -a -G wheel herenti
-pacman -S firefox kate konsole dolphin sddm plasma
+pacman -S firefox kate konsole dolphin sddm plasma ufw
 exit
 reboot
