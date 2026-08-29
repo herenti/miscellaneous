@@ -1,3 +1,5 @@
+iwctl
+station wlan0 connect
 fdisk /dev/nvme0n1
 cryptsetup -v luksFormat /dev/nvme0n1p2
 cryptsetup open /dev/nvme0n1p2 root
