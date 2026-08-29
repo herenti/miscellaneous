@@ -17,7 +17,7 @@ LANG=en_US.UTF-8
 nano /etc/hostname
 ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
 nano /etc/mkinitcpio.conf
-sd-encrypt
+sd-encrypt (add to hooks)
 grub-install --target=x86_64-efi --efi-directory=/boot
 blkid
 nano /etc/default/grub
