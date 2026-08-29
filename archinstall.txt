@@ -30,7 +30,7 @@ EDITOR=nano visudo
 usermod -a -G wheel herenti
 pacman -S firefox kate konsole dolphin sddm plasma ufw librewolf
 systemctl enable sddm
-systemctl enable networkmanager
+systemctl enable NetworkManager
 systemctl enable ufw 
 exit
 reboot
