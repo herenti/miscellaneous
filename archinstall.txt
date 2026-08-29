@@ -10,6 +10,11 @@ mount --mkdir /dev/nvme0n1p1 /mnt/boot
 pacstrap -K /mnt base linux linux-firmware intel-ucode sudo grub efibootmgr nano man-db man-pages networkmanager
 genfstab -U /mnt >> /mnt/etc/fstab
 arch-chroot -S /mnt
+locale-gen
+nano /etc/locale.conf
+LANG=en_US.UTF-8
+nano /etc/hostname
+ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
 nano /etc/mkinitcpio.conf
 sd-encrypt
 grub-install --target=x86_64-efi --efi-directory=/boot
