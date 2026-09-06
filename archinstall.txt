@@ -28,10 +28,11 @@ useradd -m herenti
 passwd herenti
 EDITOR=nano visudo
 usermod -a -G wheel herenti
-pacman -S firefox kate konsole dolphin sddm plasma ufw librewolf
+pacman -S firefox kate konsole dolphin sddm plasma ufw librewolf bluez bluez-utils
 systemctl enable sddm
 systemctl enable NetworkManager
 systemctl enable ufw 
+systemctl enable bluetooth
 exit
 reboot
 ufw enable
