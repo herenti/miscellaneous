@@ -28,7 +28,9 @@ useradd -m herenti
 passwd herenti
 EDITOR=nano visudo
 usermod -a -G wheel herenti
-pacman -S firefox kate konsole dolphin sddm plasma ufw librewolf bluez bluez-utils
+pacman -S firefox kate konsole dolphin sddm plasma ufw librewolf bluez bluez-utils haruna gwenview okular
+#optional pacman -S mullvad-vpn proton-vpn-gtk-app
+#optional systemctl enable mullvad-daemon
 systemctl enable sddm
 systemctl enable NetworkManager
 systemctl enable ufw 
@@ -36,3 +38,4 @@ systemctl enable bluetooth
 exit
 reboot
 ufw enable
+
