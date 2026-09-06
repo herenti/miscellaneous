@@ -7,27 +7,35 @@ mkfs.ext4 /dev/mapper/root
 mount /dev/mapper/root /mnt
 mkfs.fat -F32 /dev/nvme0n1p1
 mount --mkdir /dev/nvme0n1p1 /mnt/boot
-pacstrap -K /mnt base linux linux-firmware intel-ucode sudo grub efibootmgr nano man-db man-pages networkmanager
+pacstrap -K /mnt base linux linux-firmware linux-headers intel-ucode sudo grub efibootmgr nano man-db man-pages networkmanager
 genfstab -U /mnt >> /mnt/etc/fstab
+
+
 arch-chroot -S /mnt
 passwd
 locale-gen
 nano /etc/locale.conf
-LANG=en_US.UTF-8
+>paste LANG=en_US.UTF-8
 nano /etc/hostname
 ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
 nano /etc/mkinitcpio.conf
-sd-encrypt (add to hooks)
+>paste sd-encrypt (add to hooks)
 grub-install --target=x86_64-efi --efi-directory=/boot
 blkid
 nano /etc/default/grub
-rd.luks.name=device-UUID=root root=/dev/mapper/root
+>paste rd.luks.name=device-UUID=root root=/dev/mapper/root
 mkinitcpio -P
 grub-mkconfig -o /boot/grub/grub.cfg
 useradd -m herenti
 passwd herenti
 EDITOR=nano visudo
 usermod -a -G wheel herenti
+
+mkswap -U clear --size 12G --file /swapfile
+swapon /swapfile
+nano /etc/fstab
+>paste /swapfile none swap defaults 0 0
+
 pacman -S firefox kate konsole dolphin sddm plasma ufw librewolf bluez bluez-utils haruna gwenview okular
 #optional pacman -S mullvad-vpn proton-vpn-gtk-app
 #optional systemctl enable mullvad-daemon
